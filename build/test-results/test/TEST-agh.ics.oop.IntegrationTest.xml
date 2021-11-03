@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="agh.ics.oop.IntegrationTest" tests="14" skipped="0" failures="0" errors="0" timestamp="2021-11-03T18:38:53" hostname="LAPTOP-BI9OBLLP" time="0.055">
+  <properties/>
+  <testcase name="ArrayOfStringsTest1()" classname="agh.ics.oop.IntegrationTest" time="0.033"/>
+  <testcase name="ArrayOfStringsTest2()" classname="agh.ics.oop.IntegrationTest" time="0.001"/>
+  <testcase name="ArrayOfStringsTest3()" classname="agh.ics.oop.IntegrationTest" time="0.001"/>
+  <testcase name="ArrayOfStringsTest4()" classname="agh.ics.oop.IntegrationTest" time="0.002"/>
+  <testcase name="ArrayOfStringsTest5()" classname="agh.ics.oop.IntegrationTest" time="0.001"/>
+  <testcase name="OrientationTest1()" classname="agh.ics.oop.IntegrationTest" time="0.003"/>
+  <testcase name="OrientationTest2()" classname="agh.ics.oop.IntegrationTest" time="0.001"/>
+  <testcase name="OrientationTest3()" classname="agh.ics.oop.IntegrationTest" time="0.001"/>
+  <testcase name="OrientationTest4()" classname="agh.ics.oop.IntegrationTest" time="0.001"/>
+  <testcase name="PositionTest1()" classname="agh.ics.oop.IntegrationTest" time="0.0"/>
+  <testcase name="PositionTest2()" classname="agh.ics.oop.IntegrationTest" time="0.001"/>
+  <testcase name="PositionTest3()" classname="agh.ics.oop.IntegrationTest" time="0.001"/>
+  <testcase name="PositionTest4()" classname="agh.ics.oop.IntegrationTest" time="0.0"/>
+  <testcase name="PositionTest5()" classname="agh.ics.oop.IntegrationTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
