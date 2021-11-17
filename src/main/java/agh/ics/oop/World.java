@@ -3,15 +3,17 @@ package agh.ics.oop;
 public class World {
     public static void main(String[] args) {
         System.out.println("System wystartował");
-        OptionsParser parser = new OptionsParser();
-        MoveDirection[] args2 = parser.parse(args);
-        Animal zwierzak = new Animal();
-        System.out.println(zwierzak);
-        //run(args2);
-        zwierzak.move(args2);
-        System.out.println(zwierzak);
+        MoveDirection[] directions = new OptionsParser().parse(args);
+        IWorldMap map = new RectangularMap(10, 5);
+        Vector2d[] positions = { new Vector2d(2,2), new Vector2d(3,4) };
+        System.out.println(map);
+        IEngine engine = new SimulationEngine(directions, map, positions);
+        System.out.println(map);
+        engine.run();
+        System.out.println(map);
         System.out.println("Sysytem skończył działanie");
     }
+
     public static void run(MoveDirection[] arguments){
 
         for (MoveDirection argument: arguments) {

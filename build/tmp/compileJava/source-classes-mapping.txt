@@ -3,15 +3,25 @@ agh/ics/oop/MapDirection.java
  agh.ics.oop.MapDirection$1
 agh/ics/oop/Direction.java
  agh.ics.oop.Direction
-agh/ics/oop/Animal.java
- agh.ics.oop.Animal
- agh.ics.oop.Animal$1
+agh/ics/oop/OptionsParser.java
+ agh.ics.oop.OptionsParser
 agh/ics/oop/Vector2d.java
  agh.ics.oop.Vector2d
 agh/ics/oop/MoveDirection.java
  agh.ics.oop.MoveDirection
-agh/ics/oop/OptionsParser.java
- agh.ics.oop.OptionsParser
+agh/ics/oop/IEngine.java
+ agh.ics.oop.IEngine
 agh/ics/oop/World.java
  agh.ics.oop.World
  agh.ics.oop.World$1
+agh/ics/oop/SimulationEngine.java
+ agh.ics.oop.SimulationEngine
+agh/ics/oop/RectangularMap.java
+ agh.ics.oop.RectangularMap
+agh/ics/oop/IWorldMap.java
+ agh.ics.oop.IWorldMap
+agh/ics/oop/Animal.java
+ agh.ics.oop.Animal
+ agh.ics.oop.Animal$1
+agh/ics/oop/MapVisualizer.java
+ agh.ics.oop.MapVisualizer
