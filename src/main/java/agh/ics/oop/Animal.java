@@ -2,15 +2,15 @@ package agh.ics.oop;
 
 import java.util.Objects;
 
-public class Animal {
+public class Animal extends AbstractWorldMapElement{
     private MapDirection orientation = MapDirection.NORTH;
-    private Vector2d position = new Vector2d(2,2);
     private final IWorldMap map;
     private static final int maxi=4;
 
 
     public Animal(IWorldMap map){
         this.map = map;
+        this.position = new Vector2d(2,2);
     }
 
     public Animal(IWorldMap map, Vector2d initialPosition){
@@ -19,7 +19,7 @@ public class Animal {
     }
 
     public Animal(){
-        //smutny, samotny zwierzak :((
+        this.position = new Vector2d(2,2);
         this.map = new RectangularMap(maxi, maxi);
     }
 
@@ -53,11 +53,8 @@ public class Animal {
         return orientation;
     }
 
-    public Vector2d getPosition(){return position;}
+    public IWorldMap getMap(){return map;}
 
-    public boolean isAt(Vector2d position){
-        return (this.position.follows(position) && this.position.precedes(position));
-    }
 
     public void move(MoveDirection[] directions){
         for (MoveDirection direction:directions) {

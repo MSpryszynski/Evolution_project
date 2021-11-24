@@ -6,3 +6,5 @@ agh/ics/oop/IntegrationTest.java
  agh.ics.oop.IntegrationTest
 agh/ics/oop/IntegrationTestLab4.java
  agh.ics.oop.IntegrationTestLab4
+agh/ics/oop/IWorldMapTest.java
+ agh.ics.oop.IWorldMapTest
