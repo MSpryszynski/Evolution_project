@@ -2,9 +2,9 @@ agh/ics/oop/MapDirectionTest.java
  agh.ics.oop.MapDirectionTest
 agh/ics/oop/Vector2dTest.java
  agh.ics.oop.Vector2dTest
-agh/ics/oop/IntegrationTest.java
- agh.ics.oop.IntegrationTest
 agh/ics/oop/IntegrationTestLab4.java
  agh.ics.oop.IntegrationTestLab4
+agh/ics/oop/IntegrationTest.java
+ agh.ics.oop.IntegrationTest
 agh/ics/oop/IWorldMapTest.java
  agh.ics.oop.IWorldMapTest

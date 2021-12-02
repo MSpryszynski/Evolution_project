@@ -1,6 +1,5 @@
 package agh.ics.oop;
 
-import java.util.Arrays;
 
 public class OptionsParser {
     public MoveDirection[] parse(String[] directions){
@@ -14,10 +13,10 @@ public class OptionsParser {
                 case "l", "left" ->
                     result[counter] = MoveDirection.LEFT;
                 case "r", "right" -> result[counter] = MoveDirection.RIGHT;
-                default ->counter -= 1;
+                default -> throw new IllegalArgumentException(direction + " is not legal move specification");
             }
             counter += 1;
         }
-        return Arrays.copyOfRange(result,0, counter);
+        return result;
     }
 }

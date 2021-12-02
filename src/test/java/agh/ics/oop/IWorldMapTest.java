@@ -17,15 +17,17 @@ public class IWorldMapTest {
     }
     @Test
     public void placeNotInMapTest(){
-        assertTrue(grassField.place(animal3) && !rectangularMap.place(animal4));
+        grassField.place(animal3);
+        assertThrows(IllegalArgumentException.class,() -> grassField.place(animal4));
     }
     @Test
     public void placeAtAnimalTest(){
-        assertFalse(grassField.place(animal) && grassField.place(animal));
+        grassField.place(animal);
+        assertThrows(IllegalArgumentException.class,() -> grassField.place(animal));
     }
     @Test
     public void wrongMapTest(){
-        assertFalse(grassField.place(animal4));
+        assertThrows(IllegalArgumentException.class,() -> rectangularMap.place(animal));
     }
     @Test
     public void canMoveToTest(){

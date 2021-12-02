@@ -1,9 +1,10 @@
 package agh.ics.oop;
 
-import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.Random;
 
-public abstract class AbstractWorldMap implements IWorldMap{
-    protected final ArrayList<IMapElement> mapElements = new ArrayList<>();
+public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObserver{
+    protected final LinkedHashMap<Vector2d,IMapElement> mapElements = new LinkedHashMap<>();
     protected Vector2d lowLeft = new Vector2d(Integer.MAX_VALUE, Integer.MAX_VALUE);
     protected Vector2d upRight = new Vector2d(Integer.MIN_VALUE, Integer.MIN_VALUE);
 
@@ -11,36 +12,28 @@ public abstract class AbstractWorldMap implements IWorldMap{
     @Override
     public boolean place(Animal animal) {
         if (canMoveTo(animal.getPosition()) && this.equals(animal.getMap())){
-            mapElements.add(0, animal);
+            mapElements.put(animal.getPosition(), animal);
+            animal.addObserver(this);
             return true;
         }
-        return false;
+        throw new IllegalArgumentException("Position " + animal.getPosition() + " is occupied");
     }
 
     @Override
     public boolean canMoveTo(Vector2d position) {
-        for (IMapElement mapElement: mapElements) {
-            if (mapElement instanceof Animal) {
-                if (mapElement.isAt(position)) {
-                    return false;
-                }
-            }
-        }
-        return true;
+        Object mapElement = this.objectAt(position);
+        return !(mapElement instanceof Animal);
     }
 
     @Override
     public boolean isOccupied(Vector2d position) {
-        for (IMapElement mapElement: mapElements) {
-            if (mapElement.isAt(position)) {return true;}
-        }
-        return false;
+        return  (mapElements.containsKey(position));
     }
 
     @Override
     public Object objectAt(Vector2d position) {
-        for (IMapElement mapElement : mapElements) {
-            if (mapElement.isAt(position)) {return mapElement;}
+        if (isOccupied(position)) {
+            return mapElements.get(position);
         }
         return null;
     }
@@ -48,11 +41,17 @@ public abstract class AbstractWorldMap implements IWorldMap{
     @Override
     public String toString(){
         MapVisualizer visualizer = new MapVisualizer(this);
-        for (IMapElement mapElement:mapElements) {
-            Vector2d vector = mapElement.getPosition();
+        for (var entry : mapElements.entrySet()) {
+            Vector2d vector=entry.getKey();
             lowLeft = lowLeft.lowerLeft(vector);
             upRight = upRight.upperRight(vector);
         }
         return visualizer.draw(lowLeft,upRight);
+    }
+
+    @Override
+    public void positionChanged(Vector2d oldPosition, Vector2d newPosition){
+        IMapElement mapElement = mapElements.remove(oldPosition);
+        mapElements.put(newPosition, mapElement);
     }
 }

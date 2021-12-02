@@ -1,11 +1,13 @@
 package agh.ics.oop;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 public class Animal extends AbstractWorldMapElement{
     private MapDirection orientation = MapDirection.NORTH;
     private final IWorldMap map;
     private static final int maxi=4;
+    private final ArrayList<IPositionChangeObserver> observers = new ArrayList<>();
 
 
     public Animal(IWorldMap map){
@@ -23,7 +25,17 @@ public class Animal extends AbstractWorldMapElement{
         this.map = new RectangularMap(maxi, maxi);
     }
 
-
+    public void addObserver(IPositionChangeObserver observer){
+        observers.add(observer);
+    }
+    public void removeObserver(IPositionChangeObserver observer){
+        observers.remove(observer);
+    }
+    public void positionChanged(Vector2d oldPosition, Vector2d newPosition){
+        for (IPositionChangeObserver observer:observers) {
+            observer.positionChanged(oldPosition, newPosition);
+        }
+    }
     @Override
     public String toString() {
         String temp = "";
@@ -68,11 +80,13 @@ public class Animal extends AbstractWorldMapElement{
                 case FORWARD:
                     if (map.canMoveTo(orientation.toUnitVector().add(position))) {
                         position = position.add(orientation.toUnitVector());
+                        positionChanged(position.add(orientation.toUnitVector().opposite()),position);
                     }
                     break;
                 case BACKWARD:
                     if (map.canMoveTo(orientation.toUnitVector().opposite().add(position))) {
                         position = position.add(orientation.toUnitVector().opposite());
+                        positionChanged(position.add(orientation.toUnitVector()),position);
                     }
                     break;
             }

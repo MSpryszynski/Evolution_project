@@ -47,13 +47,6 @@ public class IntegrationTestLab4 {
     public void placeNotInMapTest(){
         IWorldMap map = new RectangularMap(10, 5);
         Animal zwierzak = new Animal(map, new Vector2d(11,3));
-        map.place(zwierzak);
-        for (int i=0; i<=10; i++){
-            for (int j=0; j<=5; j++){
-                if(map.isOccupied(new Vector2d(i, j))){
-                    fail();
-                }
-            }
-        }
+        assertThrows(IllegalArgumentException.class,() -> map.place(zwierzak));
     }
 }

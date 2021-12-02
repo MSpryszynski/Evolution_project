@@ -81,13 +81,11 @@ public class IntegrationTest {
     @Test
     public void ArrayOfStringsTest4(){
         String[] arr = {"forward","kaczka","l","Java",">>>>","Kotlin","left","f"};
-        xyz.move(parser.parse(arr));
-        assertTrue(xyz.isAt(new Vector2d(2,2)));
+        assertThrows(IllegalArgumentException.class, ()->xyz.move(parser.parse(arr)));
     }
     @Test
     public void ArrayOfStringsTest5(){
         String[] arr = {"forward","forward","r","b","b","obiektowe",">","funkcyjne"};
-        xyz.move(parser.parse(arr));
-        assertTrue(xyz.isAt(new Vector2d(0,4)));
+        assertThrows(IllegalArgumentException.class, ()->xyz.move(parser.parse(arr)));
     }
 }
