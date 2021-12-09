@@ -1,10 +1,10 @@
 package agh.ics.oop;
 
 import java.util.LinkedHashMap;
-import java.util.Random;
 
 public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObserver{
     protected final LinkedHashMap<Vector2d,IMapElement> mapElements = new LinkedHashMap<>();
+    protected final MapBoundary mapBoundary = new MapBoundary(this);
     protected Vector2d lowLeft = new Vector2d(Integer.MAX_VALUE, Integer.MAX_VALUE);
     protected Vector2d upRight = new Vector2d(Integer.MIN_VALUE, Integer.MIN_VALUE);
 
@@ -13,6 +13,7 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
     public boolean place(Animal animal) {
         if (canMoveTo(animal.getPosition()) && this.equals(animal.getMap())){
             mapElements.put(animal.getPosition(), animal);
+            mapBoundary.addElement(animal.getPosition());
             animal.addObserver(this);
             return true;
         }
@@ -41,17 +42,13 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
     @Override
     public String toString(){
         MapVisualizer visualizer = new MapVisualizer(this);
-        for (var entry : mapElements.entrySet()) {
-            Vector2d vector=entry.getKey();
-            lowLeft = lowLeft.lowerLeft(vector);
-            upRight = upRight.upperRight(vector);
-        }
-        return visualizer.draw(lowLeft,upRight);
+        return visualizer.draw(mapBoundary.getLowerLeft(), mapBoundary.getUpperRight());
     }
 
     @Override
     public void positionChanged(Vector2d oldPosition, Vector2d newPosition){
         IMapElement mapElement = mapElements.remove(oldPosition);
         mapElements.put(newPosition, mapElement);
+        mapBoundary.positionChanged(oldPosition, newPosition);
     }
 }

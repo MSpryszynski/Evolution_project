@@ -7,7 +7,7 @@ public class SimulationEngine implements IEngine{
     private final MoveDirection[] directions;
     private final ArrayList<Animal> animals = new ArrayList<>();
 
-    SimulationEngine(MoveDirection[] directions, IWorldMap map, Vector2d[] startingPositions){
+    public SimulationEngine(MoveDirection[] directions, IWorldMap map, Vector2d[] startingPositions){
         this.directions = directions;
 
         for (Vector2d position:startingPositions) {

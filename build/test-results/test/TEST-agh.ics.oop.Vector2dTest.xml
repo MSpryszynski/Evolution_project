@@ -1,32 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="agh.ics.oop.Vector2dTest" tests="28" skipped="0" failures="0" errors="0" timestamp="2021-12-02T11:40:27" hostname="LAPTOP-BI9OBLLP" time="0.109">
+<testsuite name="agh.ics.oop.Vector2dTest" tests="28" skipped="0" failures="0" errors="0" timestamp="2021-12-08T16:02:35" hostname="LAPTOP-BI9OBLLP" time="0.086">
   <properties/>
-  <testcase name="followsTest1()" classname="agh.ics.oop.Vector2dTest" time="0.025"/>
-  <testcase name="followsTest2()" classname="agh.ics.oop.Vector2dTest" time="0.001"/>
+  <testcase name="followsTest1()" classname="agh.ics.oop.Vector2dTest" time="0.026"/>
+  <testcase name="followsTest2()" classname="agh.ics.oop.Vector2dTest" time="0.0"/>
   <testcase name="followsTest3()" classname="agh.ics.oop.Vector2dTest" time="0.001"/>
   <testcase name="followsTest4()" classname="agh.ics.oop.Vector2dTest" time="0.001"/>
-  <testcase name="lowerLeftTest1()" classname="agh.ics.oop.Vector2dTest" time="0.004"/>
-  <testcase name="lowerLeftTest2()" classname="agh.ics.oop.Vector2dTest" time="0.001"/>
-  <testcase name="lowerLeftTest3()" classname="agh.ics.oop.Vector2dTest" time="0.036"/>
+  <testcase name="lowerLeftTest1()" classname="agh.ics.oop.Vector2dTest" time="0.003"/>
+  <testcase name="lowerLeftTest2()" classname="agh.ics.oop.Vector2dTest" time="0.0"/>
+  <testcase name="lowerLeftTest3()" classname="agh.ics.oop.Vector2dTest" time="0.002"/>
   <testcase name="addTest1()" classname="agh.ics.oop.Vector2dTest" time="0.001"/>
   <testcase name="addTest2()" classname="agh.ics.oop.Vector2dTest" time="0.001"/>
   <testcase name="addTest3()" classname="agh.ics.oop.Vector2dTest" time="0.001"/>
-  <testcase name="upperRightTest1()" classname="agh.ics.oop.Vector2dTest" time="0.0"/>
-  <testcase name="upperRightTest2()" classname="agh.ics.oop.Vector2dTest" time="0.0"/>
-  <testcase name="upperRightTest3()" classname="agh.ics.oop.Vector2dTest" time="0.001"/>
+  <testcase name="upperRightTest1()" classname="agh.ics.oop.Vector2dTest" time="0.001"/>
+  <testcase name="upperRightTest2()" classname="agh.ics.oop.Vector2dTest" time="0.001"/>
+  <testcase name="upperRightTest3()" classname="agh.ics.oop.Vector2dTest" time="0.002"/>
   <testcase name="precedesTest1()" classname="agh.ics.oop.Vector2dTest" time="0.001"/>
-  <testcase name="precedesTest2()" classname="agh.ics.oop.Vector2dTest" time="0.001"/>
+  <testcase name="precedesTest2()" classname="agh.ics.oop.Vector2dTest" time="0.002"/>
   <testcase name="precedesTest3()" classname="agh.ics.oop.Vector2dTest" time="0.001"/>
   <testcase name="precedesTest4()" classname="agh.ics.oop.Vector2dTest" time="0.001"/>
   <testcase name="oppositeTest1()" classname="agh.ics.oop.Vector2dTest" time="0.001"/>
-  <testcase name="oppositeTest2()" classname="agh.ics.oop.Vector2dTest" time="0.001"/>
+  <testcase name="oppositeTest2()" classname="agh.ics.oop.Vector2dTest" time="0.0"/>
   <testcase name="oppositeTest3()" classname="agh.ics.oop.Vector2dTest" time="0.001"/>
   <testcase name="equalsTest1()" classname="agh.ics.oop.Vector2dTest" time="0.001"/>
   <testcase name="equalsTest2()" classname="agh.ics.oop.Vector2dTest" time="0.001"/>
-  <testcase name="subtractTest1()" classname="agh.ics.oop.Vector2dTest" time="0.0"/>
+  <testcase name="subtractTest1()" classname="agh.ics.oop.Vector2dTest" time="0.001"/>
   <testcase name="subtractTest2()" classname="agh.ics.oop.Vector2dTest" time="0.001"/>
   <testcase name="subtractTest3()" classname="agh.ics.oop.Vector2dTest" time="0.001"/>
-  <testcase name="toStringTest1()" classname="agh.ics.oop.Vector2dTest" time="0.006"/>
+  <testcase name="toStringTest1()" classname="agh.ics.oop.Vector2dTest" time="0.009"/>
   <testcase name="toStringTest2()" classname="agh.ics.oop.Vector2dTest" time="0.001"/>
   <testcase name="toStringTest3()" classname="agh.ics.oop.Vector2dTest" time="0.001"/>
   <system-out><![CDATA[]]></system-out>
