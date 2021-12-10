@@ -51,4 +51,12 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
         mapElements.put(newPosition, mapElement);
         mapBoundary.positionChanged(oldPosition, newPosition);
     }
+
+    public Vector2d getLowerLeft(){
+        return mapBoundary.getLowerLeft();
+    }
+
+    public Vector2d getUpperRight(){
+        return mapBoundary.getUpperRight();
+    }
 }
