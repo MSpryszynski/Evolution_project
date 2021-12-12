@@ -5,7 +5,6 @@ import javafx.application.Application;
 import javafx.geometry.HPos;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
@@ -15,18 +14,25 @@ public class App extends Application {
 
     @Override
     public void start(Stage primaryStage){
-        GridPane gridPane = new GridPane();
-        gridPane.setGridLinesVisible(true);
         MoveDirection[] directions1 = {MoveDirection.FORWARD, MoveDirection.FORWARD, MoveDirection.FORWARD,MoveDirection.FORWARD};
         AbstractWorldMap map = new GrassField(10);
         Vector2d[] positions = {new Vector2d(1, 2), new Vector2d(2, 2), new Vector2d(3, 2),new Vector2d(4, 2)};
-        System.out.println(map);
         IEngine engine = new SimulationEngine(directions1, map, positions);
         engine.run();
-        System.out.println(map);
         map.place(new Animal(map, new Vector2d(10,10)));
         Vector2d lowLeft = map.getLowerLeft();
         Vector2d upRight = map.getUpperRight();
+        GridPane gridPane = draw(map, upRight, lowLeft);
+        Scene scene = new Scene(gridPane, 600, 600);
+        primaryStage.setScene(scene);
+        primaryStage.show();
+
+    }
+
+
+    public GridPane draw(IWorldMap map, Vector2d upRight, Vector2d lowLeft){
+        GridPane gridPane = new GridPane();
+        gridPane.setGridLinesVisible(true);
         for (int x=lowLeft.x; x<= upRight.x; x++){
             Label label = new Label(((Integer) x).toString());
             gridPane.add(label, x-lowLeft.x+1, 0, 1, 1);
@@ -59,8 +65,6 @@ public class App extends Application {
         Label label = new Label("y/x");
         gridPane.add(label, 0, 0, 1, 1);
         GridPane.setHalignment(label, HPos.CENTER);
-        Scene scene = new Scene(gridPane, 600, 600);
-        primaryStage.setScene(scene);
-        primaryStage.show();
+        return gridPane;
     }
 }
