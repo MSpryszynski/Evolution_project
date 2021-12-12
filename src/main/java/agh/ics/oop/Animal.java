@@ -96,4 +96,22 @@ public class Animal extends AbstractWorldMapElement{
         MoveDirection[] directions = {direction};
         move(directions);
     }
+    @Override
+    public String getImageUrl(){
+        switch (orientation){
+            case NORTH -> {
+                return "up.png";
+            }
+            case EAST -> {
+                return "right.png";
+            }
+            case SOUTH -> {
+                return "down.png";
+            }
+            case WEST -> {
+                return "left.png";
+            }
+            default -> throw new IllegalArgumentException("Direction not found");
+        }
+    }
 }

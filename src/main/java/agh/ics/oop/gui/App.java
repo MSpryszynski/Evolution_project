@@ -5,6 +5,7 @@ import javafx.application.Application;
 import javafx.geometry.HPos;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
@@ -13,7 +14,7 @@ import javafx.stage.Stage;
 public class App extends Application {
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage){
         GridPane gridPane = new GridPane();
         gridPane.setGridLinesVisible(true);
         MoveDirection[] directions1 = {MoveDirection.FORWARD, MoveDirection.FORWARD, MoveDirection.FORWARD,MoveDirection.FORWARD};
@@ -40,8 +41,9 @@ public class App extends Application {
             for (int j=lowLeft.y; j<= upRight.y; j++){
                 Vector2d vector = new Vector2d(i, j);
                 if(map.objectAt(vector) != null){
-                    Label label = new Label(map.objectAt(new Vector2d(i, j)).toString());
-                    gridPane.add(label, i-lowLeft.x+1, upRight.y-(j-lowLeft.y)+1, 1, 1);
+                    Label label = new Label(map.objectAt(vector).toString());
+                    GuiElementBox box = new GuiElementBox((IMapElement) map.objectAt(vector));
+                    gridPane.add(box.getImage(), i-lowLeft.x+1, upRight.y-(j-lowLeft.y)+1, 1, 1);
                     GridPane.setHalignment(label, HPos.CENTER);
                 }
                 else{
@@ -49,13 +51,15 @@ public class App extends Application {
                     gridPane.add(label, i-lowLeft.x+1, upRight.y-(j-lowLeft.y)+1, 1, 1);
                 }
             }
-            gridPane.getColumnConstraints().add(new ColumnConstraints(20));
+            gridPane.getColumnConstraints().add(new ColumnConstraints(40));
+            gridPane.getRowConstraints().add(new RowConstraints(40));
         }
-        gridPane.getColumnConstraints().add(new ColumnConstraints(20));
+        gridPane.getColumnConstraints().add(new ColumnConstraints(40));
+        gridPane.getRowConstraints().add(new RowConstraints(40));
         Label label = new Label("y/x");
         gridPane.add(label, 0, 0, 1, 1);
         GridPane.setHalignment(label, HPos.CENTER);
-        Scene scene = new Scene(gridPane, 500, 500);
+        Scene scene = new Scene(gridPane, 600, 600);
         primaryStage.setScene(scene);
         primaryStage.show();
     }
