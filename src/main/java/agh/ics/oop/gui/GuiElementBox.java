@@ -9,7 +9,6 @@ import javafx.scene.layout.VBox;
 
 
 public class GuiElementBox {
-
     private final VBox box;
 
     public GuiElementBox(IMapElement mapElement){
