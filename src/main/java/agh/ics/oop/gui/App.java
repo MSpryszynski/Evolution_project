@@ -20,7 +20,7 @@ public class App extends Application{
     private final AppUpdater appUpdater = new AppUpdater(this);
     private Stage primaryStage;
     private SimulationEngine engine;
-    private OptionsParser parser;
+
 
 
     @Override
@@ -28,7 +28,6 @@ public class App extends Application{
         this.primaryStage = primaryStage;
         Vector2d[] positions = {new Vector2d(1, 2), new Vector2d(2, 2), new Vector2d(3, 2),new Vector2d(4, 2)};
         this.engine = new SimulationEngine(map, positions, appUpdater);
-        this.parser = new OptionsParser();
         this.gridPane = new GridPane();
         Scene scene = createScene(gridPane);
         primaryStage.setScene(scene);
@@ -92,7 +91,7 @@ public class App extends Application{
         TextField text = new TextField();
         Button button = new Button("Start");
         button.setOnAction(event -> {
-            engine.setDirections(parser.parse(text.getText().split(" ")));
+            engine.setDirections(new MoveDirection[] {MoveDirection.FORWARD});
             Thread engineThread = new Thread(engine);
             engineThread.start();
         });

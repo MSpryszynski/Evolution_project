@@ -24,17 +24,6 @@ public class Vector2d {
         return (x >= other.x && y >= other.y);
     }
 
-    public Vector2d upperRight(Vector2d other){
-        int a = Math.max(x, other.x);
-        int b = Math.max(y, other.y);
-        return new Vector2d(a, b);
-    }
-
-    public Vector2d lowerLeft(Vector2d other){
-        int a = Math.min(x, other.x);
-        int b = Math.min(y, other.y);
-        return new Vector2d(a, b);
-    }
 
     public Vector2d add(Vector2d other){
         int a = x + other.x;

@@ -3,7 +3,7 @@ package agh.ics.oop;
 import agh.ics.oop.gui.AppUpdater;
 import java.util.ArrayList;
 
-public class SimulationEngine implements IEngine, Runnable{
+public class SimulationEngine implements Runnable{
     private MoveDirection[] directions;
     private final ArrayList<Animal> animals = new ArrayList<>();
     private final AppUpdater observer;

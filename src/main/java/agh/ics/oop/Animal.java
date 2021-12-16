@@ -1,28 +1,49 @@
 package agh.ics.oop;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Objects;
+import java.util.Random;
 
 public class Animal extends AbstractWorldMapElement{
     private MapDirection orientation = MapDirection.NORTH;
     private final IWorldMap map;
-    private static final int maxi=4;
+    private int energy;
     private final ArrayList<IPositionChangeObserver> observers = new ArrayList<>();
+    private final int[] genotype;
 
-
-    public Animal(IWorldMap map){
-        this.map = map;
-        this.position = new Vector2d(2,2);
-    }
 
     public Animal(IWorldMap map, Vector2d initialPosition){
         this.map = map;
         this.position = initialPosition;
+        this.energy=100;
+        this.genotype = drawGenotype();
     }
 
-    public Animal(){
-        this.position = new Vector2d(2,2);
-        this.map = new RectangularMap(maxi, maxi);
+    public Animal(IWorldMap map, Vector2d initialPosition, int energy){
+        this.map = map;
+        this.position = initialPosition;
+        this.energy=energy;
+        this.genotype = drawGenotype();
+    }
+
+    private int[] drawGenotype(){
+        Random rand = new Random();
+        int[] genotype = new int[32];
+        for (int i=0; i<32;i++){
+            int randNumber = rand.nextInt(8);
+            genotype[i] = randNumber;
+        }
+        Arrays.sort(genotype);
+        return genotype;
+    }
+
+    public int getEnergy() {
+        return energy;
+    }
+
+    public void setEnergy(int energy) {
+        this.energy = energy;
     }
 
     public void addObserver(IPositionChangeObserver observer){
@@ -96,6 +117,7 @@ public class Animal extends AbstractWorldMapElement{
         MoveDirection[] directions = {direction};
         move(directions);
     }
+
     @Override
     public String getImageUrl(){
         switch (orientation){

@@ -2,8 +2,8 @@ agh/ics/oop/OptionsParser.java
  agh.ics.oop.OptionsParser
 agh/ics/oop/Vector2d.java
  agh.ics.oop.Vector2d
-agh/ics/oop/GrassField.java
- agh.ics.oop.GrassField
+agh/ics/oop/World.java
+ agh.ics.oop.World
 module-info.java
  module-info
 agh/ics/oop/Grass.java
@@ -17,8 +17,8 @@ agh/ics/oop/MapDirection.java
  agh.ics.oop.MapDirection$1
 agh/ics/oop/RectangularMap.java
  agh.ics.oop.RectangularMap
-agh/ics/oop/MapVisualizer.java
- agh.ics.oop.MapVisualizer
+agh/ics/oop/SimulationEngine.java
+ agh.ics.oop.SimulationEngine
 agh/ics/oop/IWorldMap.java
  agh.ics.oop.IWorldMap
 agh/ics/oop/MapBoundary.java
@@ -27,8 +27,6 @@ agh/ics/oop/MapBoundary.java
  agh.ics.oop.MapBoundary$CompareY
 agh/ics/oop/IPositionChangeObserver.java
  agh.ics.oop.IPositionChangeObserver
-agh/ics/oop/Direction.java
- agh.ics.oop.Direction
 agh/ics/oop/Animal.java
  agh.ics.oop.Animal
  agh.ics.oop.Animal$1
@@ -42,9 +40,7 @@ agh/ics/oop/MoveDirection.java
  agh.ics.oop.MoveDirection
 agh/ics/oop/gui/AppUpdater.java
  agh.ics.oop.gui.AppUpdater
-agh/ics/oop/World.java
- agh.ics.oop.World
-agh/ics/oop/SimulationEngine.java
- agh.ics.oop.SimulationEngine
+agh/ics/oop/GrassField.java
+ agh.ics.oop.GrassField
 agh/ics/oop/gui/App.java
  agh.ics.oop.gui.App
