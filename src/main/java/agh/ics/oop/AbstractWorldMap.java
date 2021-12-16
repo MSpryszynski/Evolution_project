@@ -6,8 +6,8 @@ public class AbstractWorldMap implements IWorldMap, IPositionChangeObserver {
 
     protected final LinkedHashMap<Vector2d, Animal> animals = new LinkedHashMap<>();
     protected final LinkedHashMap<Vector2d, Grass> fieldsOfGrass = new LinkedHashMap<>();
-    protected Vector2d lowLeft = new Vector2d(Integer.MAX_VALUE, Integer.MAX_VALUE);
-    protected Vector2d upRight = new Vector2d(Integer.MIN_VALUE, Integer.MIN_VALUE);
+    public final Vector2d lowLeft = new Vector2d(0, 0);
+    public final Vector2d upRight = new Vector2d(30, 30);
 
 
     @Override

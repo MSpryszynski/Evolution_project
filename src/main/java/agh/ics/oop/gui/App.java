@@ -8,7 +8,6 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
@@ -16,7 +15,7 @@ import javafx.stage.Stage;
 public class App extends Application{
 
     private GridPane gridPane;
-    private final IWorldMap map = new GrassField(10);
+    private final AbstractWorldMap map = new GrassField(10);
     private final AppUpdater appUpdater = new AppUpdater(this);
     private Stage primaryStage;
     private SimulationEngine engine;
@@ -77,9 +76,7 @@ public class App extends Application{
     public void updateGridPane(){
         Platform.runLater(() -> {
             gridPane.getChildren().clear();
-            Vector2d lowLeft = map.getLowerLeft();
-            Vector2d upRight = map.getUpperRight();
-            gridPane = draw(map, upRight, lowLeft);
+            gridPane = draw(map, map.upRight, map.lowLeft);
             Scene scene = createScene(gridPane);
             primaryStage.setScene(scene);
             primaryStage.show();
@@ -88,14 +85,13 @@ public class App extends Application{
 
 
     private Scene createScene(GridPane gridPane){
-        TextField text = new TextField();
         Button button = new Button("Start");
         button.setOnAction(event -> {
             engine.setDirections(new MoveDirection[] {MoveDirection.FORWARD});
             Thread engineThread = new Thread(engine);
             engineThread.start();
         });
-        VBox box = new VBox(gridPane, button, text);
+        VBox box = new VBox(gridPane, button);
         box.setAlignment(Pos.CENTER);
         return new Scene(box, 500, 500);
     }

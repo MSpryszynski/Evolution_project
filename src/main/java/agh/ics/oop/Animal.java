@@ -86,7 +86,6 @@ public class Animal extends AbstractWorldMapElement{
         return orientation;
     }
 
-    public IWorldMap getMap(){return map;}
 
 
     public void move(MoveDirection[] directions){

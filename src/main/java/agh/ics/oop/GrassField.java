@@ -51,7 +51,7 @@ public class GrassField extends AbstractWorldMap{
 
     @Override
     public boolean place(Animal animal) {
-        if (canMoveTo(animal.getPosition()) && this.equals(animal.getMap())){
+        if (canMoveTo(animal.getPosition())){
             animals.put(animal.getPosition(), animal);
             animal.addObserver(this);
             return true;
