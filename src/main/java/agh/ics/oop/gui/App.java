@@ -15,7 +15,7 @@ import javafx.stage.Stage;
 public class App extends Application{
 
     private GridPane gridPane;
-    private final AbstractWorldMap map = new GrassField(10);
+    //private final AbstractWorldMap map = new GrassField(100, 30);
     private final AppUpdater appUpdater = new AppUpdater(this);
     private Stage primaryStage;
     private SimulationEngine engine;
@@ -26,7 +26,7 @@ public class App extends Application{
     public void start(Stage primaryStage){
         this.primaryStage = primaryStage;
         Vector2d[] positions = {new Vector2d(1, 2), new Vector2d(2, 2), new Vector2d(3, 2),new Vector2d(4, 2)};
-        this.engine = new SimulationEngine(map, positions, appUpdater);
+        //this.engine = new SimulationEngine(map, positions, appUpdater);
         this.gridPane = new GridPane();
         Scene scene = createScene(gridPane);
         primaryStage.setScene(scene);
@@ -76,7 +76,7 @@ public class App extends Application{
     public void updateGridPane(){
         Platform.runLater(() -> {
             gridPane.getChildren().clear();
-            gridPane = draw(map, map.upRight, map.lowLeft);
+            //gridPane = draw(map, map.upRight, map.lowLeft);
             Scene scene = createScene(gridPane);
             primaryStage.setScene(scene);
             primaryStage.show();
@@ -87,7 +87,6 @@ public class App extends Application{
     private Scene createScene(GridPane gridPane){
         Button button = new Button("Start");
         button.setOnAction(event -> {
-            engine.setDirections(new MoveDirection[] {MoveDirection.FORWARD});
             Thread engineThread = new Thread(engine);
             engineThread.start();
         });

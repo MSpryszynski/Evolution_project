@@ -2,7 +2,11 @@ package agh.ics.oop;
 
 public enum MapDirection {
     NORTH,
+    NORTHWEST,
+    NORTHEAST,
     SOUTH,
+    SOUTHWEST,
+    SOUTHEAST,
     WEST,
     EAST;
     public String toString() {
@@ -12,15 +16,6 @@ public enum MapDirection {
             case WEST -> { return "Zachód"; }
             case EAST -> { return "Wschód"; }
             default -> { return "Coś nie tak"; }
-        }
-    }
-
-    public MapDirection next(){
-        switch(this){
-            case NORTH -> { return EAST; }
-            case SOUTH -> { return WEST; }
-            case WEST -> { return NORTH; }
-            default -> {return SOUTH; }
         }
     }
 
