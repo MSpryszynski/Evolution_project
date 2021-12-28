@@ -31,11 +31,6 @@ public class Vector2d {
         return new Vector2d(a, b);
     }
 
-    public Vector2d subtract(Vector2d other){
-        int a = x - other.x;
-        int b = y - other.y;
-        return new Vector2d(a, b);
-    }
 
     @Override
     public boolean equals(Object other){

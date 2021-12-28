@@ -6,10 +6,6 @@ public class Grass extends AbstractWorldMapElement{
         this.position=position;
     }
 
-    public String toString(){
-        return "*";
-    }
-
     @Override
     public String getImageUrl() {
         return "grass.png";

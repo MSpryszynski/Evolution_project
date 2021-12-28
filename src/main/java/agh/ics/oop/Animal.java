@@ -11,17 +11,30 @@ public class Animal extends AbstractWorldMapElement{
     private int energy;
     private final ArrayList<IPositionChangeObserver> observers = new ArrayList<>();
     private final int[] genotype;
-    Random rand = new Random();
+    private final int moveEnergy;
+    private final Random rand = new Random();
 
 
 
-    public Animal(IWorldMap map, Vector2d initialPosition, int energy){
+
+    public Animal(IWorldMap map, Vector2d initialPosition, int energy, int moveEnergy){
         this.map = map;
         this.position = initialPosition;
         this.energy=energy;
         this.genotype = drawGenotype();
         this.direction = rand.nextInt(8);
         this.orientation = setOrientation(this.direction);
+        this.moveEnergy = moveEnergy;
+    }
+
+    public Animal(IWorldMap map, Vector2d initialPosition, int energy, int[] genotype, int moveEnergy){
+        this.map = map;
+        this.position = initialPosition;
+        this.energy=energy;
+        this.genotype = genotype;
+        this.direction = rand.nextInt(8);
+        this.orientation = setOrientation(this.direction);
+        this.moveEnergy = moveEnergy;
     }
 
     private int[] drawGenotype(){
@@ -38,8 +51,8 @@ public class Animal extends AbstractWorldMapElement{
         return energy;
     }
 
-    public void setEnergy(int energy) {
-        this.energy = energy;
+    public void addEnergy(int energy) {
+        this.energy += energy;
     }
 
     public void addObserver(IPositionChangeObserver observer){
@@ -50,7 +63,7 @@ public class Animal extends AbstractWorldMapElement{
     }
     public void positionChanged(Vector2d oldPosition, Vector2d newPosition){
         for (IPositionChangeObserver observer:observers) {
-            observer.positionChanged(oldPosition, newPosition);
+            observer.positionChanged(oldPosition, newPosition, this);
         }
     }
     @Override
@@ -69,9 +82,8 @@ public class Animal extends AbstractWorldMapElement{
         return temp;
     }
 
-
-    public MapDirection getOrientation() {
-        return orientation;
+    public int[] getGenotype(){
+        return genotype;
     }
 
 
@@ -79,64 +91,65 @@ public class Animal extends AbstractWorldMapElement{
         int randInt = rand.nextInt(32);
         int move = this.genotype[randInt];
         switch (move) {
-            case 0 -> {
-                this.moveForward();
-                this.energy -= 10;
-            }
+            case 0 -> this.moveForward();
             case 1 -> {
                 this.direction += 1;
                 this.direction %= 8;
                 this.orientation = setOrientation(this.direction);
-                this.energy -= 2;
             }
             case 2 -> {
                 this.direction += 2;
                 this.direction %= 8;
                 this.orientation = setOrientation(this.direction);
-                this.energy -= 2;
             }
             case 3 -> {
                 this.direction += 3;
                 this.direction %= 8;
                 this.orientation = setOrientation(this.direction);
-                this.energy -= 2;
             }
-            case 4 -> {
-                this.moveBackward();
-                this.energy -= 10;
-            }
+            case 4 -> this.moveBackward();
             case 5 -> {
                 this.direction += 5;
                 this.direction %= 8;
                 this.orientation = setOrientation(this.direction);
-                this.energy -= 2;
             }
             case 6 -> {
                 this.direction += 6;
                 this.direction %= 8;
                 this.orientation = setOrientation(this.direction);
-                this.energy -= 2;
             }
             case 7 -> {
                 this.direction += 7;
                 this.direction %= 8;
                 this.orientation = setOrientation(this.direction);
-                this.energy -= 2;
             }
         }
+        this.energy -= moveEnergy;
     }
 
     private void moveForward(){
+        Vector2d tempPosition = position;
         if (map.canMoveTo(orientation.toUnitVector().add(position))) {
             position = position.add(orientation.toUnitVector());
-            positionChanged(position.add(orientation.toUnitVector()),position);
+            positionChanged(tempPosition,position);
+        }
+        else if(this.map instanceof RoundWorld){
+            position = position.add(orientation.toUnitVector());
+            position = new Vector2d(position.x % (map.getWidth()+1), position.y % (map.getHeight()+1));
+            positionChanged(tempPosition, position);
         }
     }
 
     private void moveBackward(){
+        Vector2d tempPosition = position;
         if (map.canMoveTo(orientation.toUnitVector().opposite().add(position))) {
             position = position.add(orientation.toUnitVector().opposite());
-            positionChanged(position.add(orientation.toUnitVector().opposite()),position);
+            positionChanged(tempPosition,position);
+        }
+        else if(this.map instanceof RoundWorld){
+            position = position.add(orientation.toUnitVector().opposite());
+            position = new Vector2d(position.x % (map.getWidth()+1), position.y % (map.getHeight()+1));
+            positionChanged(tempPosition,position);
         }
     }
 
@@ -157,7 +170,7 @@ public class Animal extends AbstractWorldMapElement{
     @Override
     public String getImageUrl(){
         switch (orientation){
-            case NORTH -> {
+            case NORTH, NORTHEAST, NORTHWEST, SOUTHEAST, SOUTHWEST -> {
                 return "up.png";
             }
             case EAST -> {
@@ -171,5 +184,25 @@ public class Animal extends AbstractWorldMapElement{
             }
             default -> throw new IllegalArgumentException("Direction not found");
         }
+    }
+
+    public Animal reproduction(Animal father){
+        int[] fatherGenotype = father.getGenotype();
+        int[] childGenotype = new int[32];
+        Random random = new Random();
+        int motherSide = random.nextInt(2);
+        int genotypeBorder = energy*32/(energy+ father.getEnergy());
+        if (motherSide == 0){
+            System.arraycopy(genotype, 0, childGenotype, 0, genotypeBorder);
+            System.arraycopy(fatherGenotype, genotypeBorder, childGenotype, genotypeBorder, 32 - genotypeBorder);
+        }
+        else{
+            System.arraycopy(fatherGenotype, 0, childGenotype, 0, genotypeBorder);
+            System.arraycopy(genotype, genotypeBorder, childGenotype, genotypeBorder, 32 - genotypeBorder);
+        }
+        Arrays.sort(childGenotype);
+        this.addEnergy(-energy/4);
+        father.addEnergy(-father.getEnergy()/4);
+        return new Animal(map, position, (energy+ father.getEnergy())/4, childGenotype, moveEnergy);
     }
 }
