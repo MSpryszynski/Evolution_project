@@ -18,6 +18,12 @@ public class AbstractWorldMap implements IWorldMap, IPositionChangeObserver {
     protected final int plantEnergy;
     protected final int startEnergy;
     protected final int moveEnergy;
+    protected long lifetime;
+    protected int deadAnimals;
+    protected int currentEnergy;
+    protected int children;
+    private Animal trackedAnimal;
+    private String trackedStatus = "Alive";
     private final Comparator<Animal> comparator = new Compare();
 
 
@@ -33,9 +39,11 @@ public class AbstractWorldMap implements IWorldMap, IPositionChangeObserver {
         this.plantEnergy = plantEnergy;
         this.startEnergy = startEnergy;
         this.moveEnergy = moveEnergy;
+        this.lifetime = 0;
+        this.deadAnimals = 0;
+        this.currentEnergy = 0;
+        this.children = 0;
     }
-
-
 
 
     public void placeGrass(int width, int height, Vector2d startingVector){
@@ -69,8 +77,11 @@ public class AbstractWorldMap implements IWorldMap, IPositionChangeObserver {
     }
 
     public void moveAnimals(){
+        currentEnergy = 0;
         for (Animal animal:animalList) {
             animal.useGenotype();
+            animal.updateLifeTime();
+            currentEnergy += animal.getEnergy();
         }
     }
 
@@ -102,9 +113,11 @@ public class AbstractWorldMap implements IWorldMap, IPositionChangeObserver {
         for (var entry : animals.entrySet()) {
             ArrayList<Animal> tempAnimals = entry.getValue();
             if (tempAnimals.size() >= 2 && tempAnimals.get(1).getEnergy() >= startEnergy/2){
+                children += 2;
                 Animal child = tempAnimals.get(0).reproduction(tempAnimals.get(1));
                 tempAnimals.add(child);
                 tempAnimals.sort(comparator);
+                child.addObserver(this);
                 animals.put(entry.getKey(), tempAnimals);
                 animalList.add(child);
             }
@@ -112,24 +125,19 @@ public class AbstractWorldMap implements IWorldMap, IPositionChangeObserver {
     }
 
     public void deleteDeadAnimals(){
-        Set<Vector2d> set = animals.keySet();
-        for (Animal animal:animalList){
-            if (!set.contains(animal.getPosition())){
-                System.out.println("Kurwa");
-                System.out.println(animal.getPosition());
-                for(Vector2d vector:set){
-                    System.out.println(vector);
-                }
-                System.out.println(animal.getEnergy());
-            }
-            if (animal.getEnergy()<=0){
+        for (Animal animal:animalList) {
+            if (animal.getEnergy() <= 0) {
                 deleteAnimal(animal.getPosition(), animal);
+                if(animal.isTracked()){
+                    trackedStatus = "Dead";
+                }
+                deadAnimals += 1;
+                lifetime += animal.getLifeTime();
+                children -= animal.getChildren();
             }
         }
         animalList.removeIf(animal -> animal.getEnergy() <= 0);
     }
-
-
 
     @Override
     public boolean isOccupied(Vector2d position) {
@@ -189,6 +197,111 @@ public class AbstractWorldMap implements IWorldMap, IPositionChangeObserver {
     public boolean canMoveTo(Vector2d position) {
         return (position.follows(startPoint) && position.precedes(endPoint));
     }
+
+    public Integer getNumberOfAnimals(){
+        return animalList.size();
+    }
+
+    public Integer getNumberOfPlants(){
+        return fieldsOfGrass.size();
+    }
+
+    public Genotype getBestGenotype(){
+        HashMap<Genotype,Integer> genesMap = new HashMap<>();
+        Integer highestValue = 0;
+        Genotype strongestGenotype = null;
+        for(Animal animal:animalList){
+            Genotype genotype = animal.getGenotype();
+            if(genesMap.containsKey(genotype)){
+                genesMap.put(genotype, genesMap.get(genotype)+1);
+                if (highestValue < genesMap.get(genotype)){
+                    highestValue = genesMap.get(genotype);
+                    strongestGenotype = genotype;
+                }
+            }
+            else {
+                genesMap.put(genotype, 1);
+                if (highestValue == 0){
+                    highestValue = 1;
+                    strongestGenotype = genotype;
+                }
+            }
+        }
+        return strongestGenotype;
+    }
+
+
+    public String getStrongestGenotype(){
+        HashMap<Genotype,Integer> genesMap = new HashMap<>();
+        Integer highestValue = 0;
+        Genotype strongestGenotype = null;
+        for(Animal animal:animalList){
+            Genotype genotype = animal.getGenotype();
+            if(genesMap.containsKey(genotype)){
+                genesMap.put(genotype, genesMap.get(genotype)+1);
+                if (highestValue < genesMap.get(genotype)){
+                    highestValue = genesMap.get(genotype);
+                    strongestGenotype = genotype;
+                }
+            }
+            else {
+                genesMap.put(genotype, 1);
+                if (highestValue == 0){
+                    highestValue = 1;
+                    strongestGenotype = genotype;
+                }
+            }
+        }
+        if (strongestGenotype != null){
+            return strongestGenotype.toString() + ' ' + highestValue.toString();
+        }
+        return "All animals are dead";
+    }
+
+    public ArrayList<Animal> getAnimalList(){
+        return animalList;
+    }
+
+    public Integer getAverageEnergy(){
+        if(animalList.size()>0){
+            return currentEnergy/animalList.size();
+        }
+        else{
+            return 0;
+        }
+    }
+
+    public Double averageChildren(){
+        double survivors = animalList.size();
+        if(survivors>0){
+            return children/survivors;
+        }
+        else return (double) 0;
+    }
+
+    public Double averageLifeTime(){
+        if (deadAnimals == 0){
+            return (double)0;
+        }
+        return lifetime/(double)deadAnimals;
+    }
+
+    public void resetTrackedStatus(){
+        trackedStatus = "Alive";
+    }
+
+    public String getTrackedStatus(){
+        return trackedStatus;
+    }
+
+    public Animal sendTrackedAnimal(){
+        return trackedAnimal;
+    }
+
+    public void setTrackedAnimal(Animal animal){
+        trackedAnimal = animal;
+    }
+
 
 
     static class Compare implements Comparator<Animal> {

@@ -1,14 +1,11 @@
 agh/ics/oop/RoundWorld.java
  agh.ics.oop.RoundWorld
-agh/ics/oop/gui/GuiElementBox.java
- agh.ics.oop.gui.GuiElementBox
-module-info.java
- module-info
-agh/ics/oop/AbstractWorldMap.java
- agh.ics.oop.AbstractWorldMap
- agh.ics.oop.AbstractWorldMap$Compare
 agh/ics/oop/Vector2d.java
  agh.ics.oop.Vector2d
+agh/ics/oop/FlatWorld.java
+ agh.ics.oop.FlatWorld
+module-info.java
+ module-info
 agh/ics/oop/Grass.java
  agh.ics.oop.Grass
 agh/ics/oop/AbstractWorldMapElement.java
@@ -16,8 +13,10 @@ agh/ics/oop/AbstractWorldMapElement.java
 agh/ics/oop/MapDirection.java
  agh.ics.oop.MapDirection
  agh.ics.oop.MapDirection$1
-agh/ics/oop/FlatWorld.java
- agh.ics.oop.FlatWorld
+agh/ics/oop/gui/Settings.java
+ agh.ics.oop.gui.Settings
+agh/ics/oop/Genotype.java
+ agh.ics.oop.Genotype
 agh/ics/oop/IWorldMap.java
  agh.ics.oop.IWorldMap
 agh/ics/oop/IPositionChangeObserver.java
@@ -27,11 +26,17 @@ agh/ics/oop/Animal.java
  agh.ics.oop.Animal$1
 agh/ics/oop/IMapElement.java
  agh.ics.oop.IMapElement
-agh/ics/oop/SimulationEngine.java
- agh.ics.oop.SimulationEngine
-agh/ics/oop/World.java
- agh.ics.oop.World
+agh/ics/oop/AbstractWorldMap.java
+ agh.ics.oop.AbstractWorldMap
+ agh.ics.oop.AbstractWorldMap$Compare
+agh/ics/oop/gui/GuiElementBox.java
+ agh.ics.oop.gui.GuiElementBox
+ agh.ics.oop.gui.GuiElementBox$1
 agh/ics/oop/gui/AppUpdater.java
  agh.ics.oop.gui.AppUpdater
+agh/ics/oop/World.java
+ agh.ics.oop.World
+agh/ics/oop/SimulationEngine.java
+ agh.ics.oop.SimulationEngine
 agh/ics/oop/gui/App.java
  agh.ics.oop.gui.App

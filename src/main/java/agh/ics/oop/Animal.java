@@ -1,7 +1,6 @@
 package agh.ics.oop;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Random;
 
 public class Animal extends AbstractWorldMapElement{
@@ -10,9 +9,16 @@ public class Animal extends AbstractWorldMapElement{
     private final IWorldMap map;
     private int energy;
     private final ArrayList<IPositionChangeObserver> observers = new ArrayList<>();
-    private final int[] genotype;
+    private final Genotype genotype;
     private final int moveEnergy;
     private final Random rand = new Random();
+    private int lifeTime=0;
+    private int children=0;
+    private boolean tracked = false;
+    private boolean trackedAncestor = false;
+    private int trackedChildren = 0;
+    private int trackedDescendants = 0;
+    private int deathDay = 0;
 
 
 
@@ -21,13 +27,13 @@ public class Animal extends AbstractWorldMapElement{
         this.map = map;
         this.position = initialPosition;
         this.energy=energy;
-        this.genotype = drawGenotype();
+        this.genotype = new Genotype();
         this.direction = rand.nextInt(8);
         this.orientation = setOrientation(this.direction);
         this.moveEnergy = moveEnergy;
     }
 
-    public Animal(IWorldMap map, Vector2d initialPosition, int energy, int[] genotype, int moveEnergy){
+    public Animal(IWorldMap map, Vector2d initialPosition, int energy, Genotype genotype, int moveEnergy){
         this.map = map;
         this.position = initialPosition;
         this.energy=energy;
@@ -35,16 +41,6 @@ public class Animal extends AbstractWorldMapElement{
         this.direction = rand.nextInt(8);
         this.orientation = setOrientation(this.direction);
         this.moveEnergy = moveEnergy;
-    }
-
-    private int[] drawGenotype(){
-        int[] genotype = new int[32];
-        for (int i=0; i<32;i++){
-            int randNumber = rand.nextInt(8);
-            genotype[i] = randNumber;
-        }
-        Arrays.sort(genotype);
-        return genotype;
     }
 
     public int getEnergy() {
@@ -82,14 +78,14 @@ public class Animal extends AbstractWorldMapElement{
         return temp;
     }
 
-    public int[] getGenotype(){
+    public Genotype getGenotype(){
         return genotype;
     }
 
 
     public void useGenotype(){
         int randInt = rand.nextInt(32);
-        int move = this.genotype[randInt];
+        int move = this.genotype.getGenes()[randInt];
         switch (move) {
             case 0 -> this.moveForward();
             case 1 -> {
@@ -136,6 +132,12 @@ public class Animal extends AbstractWorldMapElement{
         else if(this.map instanceof RoundWorld){
             position = position.add(orientation.toUnitVector());
             position = new Vector2d(position.x % (map.getWidth()+1), position.y % (map.getHeight()+1));
+            if (position.x < 0) {
+                position = new Vector2d(map.getWidth(), position.y);
+            }
+            if (position.y < 0) {
+                position = new Vector2d(position.x, map.getHeight());
+            }
             positionChanged(tempPosition, position);
         }
     }
@@ -149,6 +151,12 @@ public class Animal extends AbstractWorldMapElement{
         else if(this.map instanceof RoundWorld){
             position = position.add(orientation.toUnitVector().opposite());
             position = new Vector2d(position.x % (map.getWidth()+1), position.y % (map.getHeight()+1));
+            if (position.x < 0) {
+                position = new Vector2d(map.getWidth(), position.y);
+            }
+            if (position.y < 0) {
+                position = new Vector2d(position.x, map.getHeight());
+            }
             positionChanged(tempPosition,position);
         }
     }
@@ -167,42 +175,97 @@ public class Animal extends AbstractWorldMapElement{
         return null;
     }
 
-    @Override
-    public String getImageUrl(){
-        switch (orientation){
-            case NORTH, NORTHEAST, NORTHWEST, SOUTHEAST, SOUTHWEST -> {
-                return "up.png";
-            }
-            case EAST -> {
-                return "right.png";
-            }
-            case SOUTH -> {
-                return "down.png";
-            }
-            case WEST -> {
-                return "left.png";
-            }
-            default -> throw new IllegalArgumentException("Direction not found");
-        }
-    }
 
     public Animal reproduction(Animal father){
-        int[] fatherGenotype = father.getGenotype();
-        int[] childGenotype = new int[32];
-        Random random = new Random();
-        int motherSide = random.nextInt(2);
+        this.addChild();
+        father.addChild();
+        Genotype fatherGenotype = father.getGenotype();
         int genotypeBorder = energy*32/(energy+ father.getEnergy());
-        if (motherSide == 0){
-            System.arraycopy(genotype, 0, childGenotype, 0, genotypeBorder);
-            System.arraycopy(fatherGenotype, genotypeBorder, childGenotype, genotypeBorder, 32 - genotypeBorder);
-        }
-        else{
-            System.arraycopy(fatherGenotype, 0, childGenotype, 0, genotypeBorder);
-            System.arraycopy(genotype, genotypeBorder, childGenotype, genotypeBorder, 32 - genotypeBorder);
-        }
-        Arrays.sort(childGenotype);
+        Genotype childGenotype = new Genotype(this.genotype, fatherGenotype, genotypeBorder);
         this.addEnergy(-energy/4);
         father.addEnergy(-father.getEnergy()/4);
-        return new Animal(map, position, (energy+ father.getEnergy())/4, childGenotype, moveEnergy);
+        Animal child = new Animal(map, position, (energy+ father.getEnergy())/4, childGenotype, moveEnergy);
+        if(tracked){
+            trackedChildren += 1;
+            trackedDescendants +=1;
+            child.setTrackedAncestor(true);
+        }
+        if(father.isTracked()){
+            father.addTrackedChild();
+            father.addTrackedDescendants();
+            child.setTrackedAncestor(true);
+        }
+        if(trackedAncestor){
+            child.setTrackedAncestor(true);
+            Animal ancestor = map.sendTrackedAnimal();
+            ancestor.addTrackedDescendants();
+        }
+        if (father.hasTrackedAncestor()){
+            child.setTrackedAncestor(true);
+            Animal ancestor = map.sendTrackedAnimal();
+            ancestor.addTrackedDescendants();
+        }
+        return child;
+    }
+
+    public void updateLifeTime(){
+        this.lifeTime += 1;
+    }
+
+    public int getLifeTime(){
+        return lifeTime;
+    }
+
+    public void addChild(){
+        children += 1;
+    }
+
+    public int getChildren(){
+        return children;
+    }
+
+    public void setTracked(){
+        this.tracked = true;
+    }
+    public void unsetTracked(){
+        this.tracked = false;
+        trackedChildren = 0;
+        trackedDescendants = 0;
+        map.resetTrackedStatus();
+    }
+    public boolean isTracked(){
+        return tracked;
+    }
+
+    public void addTrackedChild(){
+        this.trackedChildren += 1;
+    }
+
+    public Integer getTrackedChildren(){
+        return trackedChildren;
+    }
+
+    public void setDeathDay(int day){
+        this.deathDay = day;
+    }
+
+    public Integer getDeathDay(){
+        return deathDay;
+    }
+
+    public void setTrackedAncestor(boolean bool){
+        trackedAncestor = bool;
+    }
+
+    public void addTrackedDescendants(){
+        this.trackedDescendants += 1;
+    }
+
+    public boolean hasTrackedAncestor(){
+        return trackedAncestor;
+    }
+
+    public Integer getTrackedDescendants(){
+        return trackedDescendants;
     }
 }
