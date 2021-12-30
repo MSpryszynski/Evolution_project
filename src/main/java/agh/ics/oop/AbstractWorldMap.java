@@ -24,10 +24,12 @@ public class AbstractWorldMap implements IWorldMap, IPositionChangeObserver {
     protected int children;
     private Animal trackedAnimal;
     private String trackedStatus = "Alive";
+    private boolean isMagic;
+    private int chancesLeft = 3;
     private final Comparator<Animal> comparator = new Compare();
 
 
-    public AbstractWorldMap(int width, int height, int jungleWidth, int jungleHeight, int plantEnergy, int startEnergy, int moveEnergy){
+    public AbstractWorldMap(int width, int height, int jungleWidth, int jungleHeight, int plantEnergy, int startEnergy, int moveEnergy, boolean isMagic){
         this.width = width;
         this.height = height;
         this.startPoint = new Vector2d(0, 0);
@@ -43,6 +45,7 @@ public class AbstractWorldMap implements IWorldMap, IPositionChangeObserver {
         this.deadAnimals = 0;
         this.currentEnergy = 0;
         this.children = 0;
+        this.isMagic = isMagic;
     }
 
 
@@ -76,6 +79,23 @@ public class AbstractWorldMap implements IWorldMap, IPositionChangeObserver {
         }
     }
 
+    public void placeMagicAnimal(int width, int height, Genotype genotype){
+        Random rand = new Random();
+        while(true){
+            int next = rand.nextInt((width+1) * (height+1));
+            Vector2d vector = (new Vector2d(next % (width+1), next/ (width+1)));
+            if (!isOccupied(vector)){
+                Animal animal = new Animal(this, vector, startEnergy, genotype, moveEnergy);
+                ArrayList<Animal> tempAnimals = new ArrayList<>();
+                tempAnimals.add(animal);
+                animal.addObserver(this);
+                animals.put(vector, tempAnimals);
+                animalList.add(animal);
+                break;
+            }
+        }
+    }
+
     public void moveAnimals(){
         currentEnergy = 0;
         for (Animal animal:animalList) {
@@ -94,7 +114,6 @@ public class AbstractWorldMap implements IWorldMap, IPositionChangeObserver {
         Set<Vector2d> keySet = animals.keySet();
         for(Vector2d vector : keySet){
             if(fieldsOfGrass.containsKey(vector)){
-                fieldsOfGrass.remove(vector);
                 ArrayList<Animal> tempAnimals = animals.get(vector);
                 int maxEnergy = tempAnimals.get(0).getEnergy();
                 int iter=0;
@@ -137,6 +156,25 @@ public class AbstractWorldMap implements IWorldMap, IPositionChangeObserver {
             }
         }
         animalList.removeIf(animal -> animal.getEnergy() <= 0);
+        if(isMagic && animalList.size()<= 5 && chancesLeft>0){
+            chancesLeft -= 1;
+            if(animalList.size()>0){
+                ArrayList<Genotype> genotypes = new ArrayList<>();
+                int iterator = 0;
+                while (genotypes.size()+animalList.size()<10){
+                    genotypes.add(animalList.get(iterator % animalList.size()).getGenotype());
+                    iterator += 1;
+                }
+                for (Genotype genotype:genotypes){
+                    placeMagicAnimal(width, height, genotype);
+                }
+            }
+            else{
+                for(int i=0;i<10;i++){
+                    placeAnimals(width, height);
+                }
+            }
+        }
     }
 
     @Override
@@ -300,6 +338,16 @@ public class AbstractWorldMap implements IWorldMap, IPositionChangeObserver {
 
     public void setTrackedAnimal(Animal animal){
         trackedAnimal = animal;
+    }
+
+    public String sendMagicInfo(){
+        if(!isMagic){
+            return "Map isn't magic";
+        }
+        if(chancesLeft == 1 ){
+            return chancesLeft + " chance left";
+        }
+        return chancesLeft + " chances left";
     }
 
 

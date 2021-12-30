@@ -20,9 +20,6 @@ public class Animal extends AbstractWorldMapElement{
     private int trackedDescendants = 0;
     private int deathDay = 0;
 
-
-
-
     public Animal(IWorldMap map, Vector2d initialPosition, int energy, int moveEnergy){
         this.map = map;
         this.position = initialPosition;

@@ -50,6 +50,9 @@ public interface IWorldMap {
 
     Genotype getBestGenotype();
 
+    String sendMagicInfo();
+
+
 
 
 }

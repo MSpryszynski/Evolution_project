@@ -15,7 +15,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
-
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -58,6 +57,8 @@ public class App extends Application{
     private final LineChart lineChartGrass = new LineChart(xAxisGrass, yAxisGrass);
     private Animal trackedAnimal = null;
     private boolean showBestGenotype = false;
+    private boolean isMagic1 = false;
+    private boolean isMagic2 = false;
 
 
 
@@ -195,6 +196,10 @@ public class App extends Application{
             Label children2 = new Label(map2.averageChildren().toString());
             GridPane.setHalignment(children, HPos.CENTER);
             GridPane.setHalignment(children2, HPos.CENTER);
+            Label magicChances = new Label(map.sendMagicInfo());
+            Label magicChances2 = new Label(map2.sendMagicInfo());
+            GridPane.setHalignment(magicChances, HPos.CENTER);
+            GridPane.setHalignment(magicChances2, HPos.CENTER);
             this.animals.getData().add(new XYChart.Data(numberOfDays, map.getNumberOfAnimals()));
             this.animals2.getData().add(new XYChart.Data(numberOfDays2, map2.getNumberOfAnimals()));
             this.grass.getData().add(new XYChart.Data(numberOfDays, map.getNumberOfPlants()));
@@ -229,9 +234,12 @@ public class App extends Application{
             gridBox.add(new Label("Average children: "),0, 8);
             gridBox.add(children,1, 8);
             gridBox.add(children2, 2, 8);
-            gridBox.add(lineChartAnimals, 1, 9);
+            gridBox.add(new Label("Magic chances left: "), 0, 9);
+            gridBox.add(magicChances,1,9);
+            gridBox.add(magicChances2,2,9);
+            gridBox.add(lineChartAnimals, 1, 10);
             GridPane.setHalignment(lineChartAnimals, HPos.CENTER);
-            gridBox.add(lineChartGrass, 2, 9);
+            gridBox.add(lineChartGrass, 2, 10);
             GridPane.setHalignment(lineChartGrass, HPos.CENTER);
             if(trackedAnimal != null){
                 GridPane trackBox = new GridPane();
@@ -303,6 +311,16 @@ public class App extends Application{
         Label jungleWidthLabel = new Label("Jungle width: ");
         TextField jungleHeightText = new TextField();
         Label jungleHeightLabel = new Label("Jungle height: ");
+        Button magicMap1 = new Button("Set Map1 magic");
+        magicMap1.setOnAction(event -> {
+            isMagic1 = true;
+            magicMap1.setVisible(false);
+        });
+        Button magicMap2 = new Button("Set Map2 magic");
+        magicMap2.setOnAction(event -> {
+            isMagic2 = true;
+            magicMap2.setVisible(false);
+        });
         Button button = new Button("Start");
         button.setOnAction(event ->  {
             this.width = Integer.parseInt(widthText.getText());
@@ -312,8 +330,8 @@ public class App extends Application{
             this.plantEnergy = Integer.parseInt(plantEnergyText.getText());
             this.startEnergy = Integer.parseInt(startEnergyText.getText());
             this.moveEnergy = Integer.parseInt(moveEnergyText.getText());
-            this.map = new FlatWorld(width, height, jungleWidth, jungleHeight, plantEnergy, startEnergy, moveEnergy);
-            this.map2 = new RoundWorld(width, height, jungleWidth, jungleHeight, plantEnergy, startEnergy, moveEnergy);
+            this.map = new FlatWorld(width, height, jungleWidth, jungleHeight, plantEnergy, startEnergy, moveEnergy, isMagic1);
+            this.map2 = new RoundWorld(width, height, jungleWidth, jungleHeight, plantEnergy, startEnergy, moveEnergy, isMagic2);
             this.engine = new SimulationEngine(map, appUpdater, 10);
             this.engine2 = new SimulationEngine(map2, appUpdater, 10);
             engineThread = new Thread(engine);
@@ -350,7 +368,7 @@ public class App extends Application{
         gridPane.add(jungleHeightLabel, 0, 6);
         gridPane.add(jungleHeightText, 1, 6);
         gridPane.setAlignment(Pos.CENTER);
-        VBox box = new VBox(gridPane, button);
+        VBox box = new VBox(gridPane, magicMap1, magicMap2, button);
         box.setAlignment(Pos.CENTER);
         return new Scene(box, 300, 300);
     }
