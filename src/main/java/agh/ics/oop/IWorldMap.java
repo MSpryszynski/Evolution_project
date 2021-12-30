@@ -52,7 +52,8 @@ public interface IWorldMap {
 
     String sendMagicInfo();
 
+    Vector2d getJungleStartPoint();
 
-
+    Vector2d getJungleEndPoint();
 
 }

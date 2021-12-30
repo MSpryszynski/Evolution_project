@@ -76,27 +76,27 @@ public class App extends Application{
     public GridPane draw(IWorldMap worldMap, Vector2d upRight, Vector2d lowLeft){
         primaryStage.setTitle("Ewolucja!");
         GridPane gridPane = new GridPane();
-        gridPane.setGridLinesVisible(true);
         for (int x=lowLeft.x; x<= upRight.x; x++){
             Label label = new Label(((Integer) x).toString());
             gridPane.add(label, x-lowLeft.x+1, 0, 1, 1);
             GridPane.setHalignment(label, HPos.CENTER);
-            gridPane.getColumnConstraints().add(new ColumnConstraints(20));
+            gridPane.getColumnConstraints().add(new ColumnConstraints(200/width));
         }
         for (int y=lowLeft.y; y<= upRight.y; y++){
             Label label = new Label(((Integer) y).toString());
             gridPane.add(label, 0, upRight.y-y+1, 1, 1);
             GridPane.setHalignment(label, HPos.CENTER);
-            gridPane.getRowConstraints().add(new RowConstraints(20));
+            gridPane.getRowConstraints().add(new RowConstraints(200/width));
         }
         for (int i=upRight.x; i>=lowLeft.x; i--){
             for (int j=lowLeft.y; j<= upRight.y; j++){
                 Vector2d vector = new Vector2d(i, j);
+                boolean isJungle = vector.follows(worldMap.getJungleStartPoint()) && vector.precedes(worldMap.getJungleEndPoint());
                 Object object = worldMap.objectAt(vector);
                 if(object != null){
                     Label label = new Label();
                     if (object instanceof Grass){
-                        GuiElementBox box = new GuiElementBox(grassImage);
+                        GuiElementBox box = new GuiElementBox(grassImage, width, isJungle);
                         gridPane.add(box.getImage(), i-lowLeft.x+1, upRight.y-j+1, 1, 1);
                     }
                     else{
@@ -104,7 +104,7 @@ public class App extends Application{
                         if(tempAnimals.size()>0){
                             Animal animal = tempAnimals.get(0);
                             if(showBestGenotype && animal.getGenotype().equals(worldMap.getBestGenotype())){
-                                GuiElementBox box = new GuiElementBox(animal.getEnergy(), true);
+                                GuiElementBox box = new GuiElementBox(animal.getEnergy(), true, width, isJungle);
                                 VBox guiBox = box.getImage();
                                 guiBox.setOnMouseClicked((action) -> {
                                     if(trackedAnimal != null){
@@ -118,10 +118,10 @@ public class App extends Application{
                                     trackedAnimal = animal;
                                     trackedAnimal.setTracked();
                                 });
-                                gridPane.add(box.getImage(), i-lowLeft.x+1, upRight.y-j+1, 1, 1);
+                                gridPane.add(guiBox, i-lowLeft.x+1, upRight.y-j+1, 1, 1);
                             }
                             else{
-                                GuiElementBox box = new GuiElementBox(animal.getEnergy(), false);
+                                GuiElementBox box = new GuiElementBox(animal.getEnergy(), false, width, isJungle);
                                 VBox guiBox = box.getImage();
                                 guiBox.setOnMouseClicked((action) -> {
                                     if(trackedAnimal != null){
@@ -135,20 +135,20 @@ public class App extends Application{
                                     trackedAnimal = animal;
                                     trackedAnimal.setTracked();
                                 });
-                                gridPane.add(box.getImage(), i-lowLeft.x+1, upRight.y-j+1, 1, 1);
+                                gridPane.add(guiBox, i-lowLeft.x+1, upRight.y-j+1, 1, 1);
                             }
                         }
                     }
                     GridPane.setHalignment(label, HPos.CENTER);
                 }
                 else{
-                    Label label = new Label("");
-                    gridPane.add(label, i-lowLeft.x+1, upRight.y-j+1, 1, 1);
+                    GuiElementBox box = new GuiElementBox(isJungle);
+                    gridPane.add(box.getImage(), i-lowLeft.x+1, upRight.y-j+1, 1, 1);
                 }
             }
         }
-        gridPane.getColumnConstraints().add(new ColumnConstraints(20));
-        gridPane.getRowConstraints().add(new RowConstraints(20));
+        gridPane.getColumnConstraints().add(new ColumnConstraints(200/width));
+        gridPane.getRowConstraints().add(new RowConstraints(200/width));
         Label label = new Label("y/x");
         gridPane.add(label, 0, 0, 1, 1);
         GridPane.setHalignment(label, HPos.CENTER);
@@ -294,7 +294,6 @@ public class App extends Application{
         });
     }
 
-
     private Scene createScene(){
         GridPane gridPane = new GridPane();
         TextField widthText = new TextField();
@@ -374,8 +373,6 @@ public class App extends Application{
     }
 
     //https://mkyong.com/java/how-to-export-data-to-csv-file-java/
-
-
     public String convertToCsvFormat(final String[] line) {
         return convertToCsvFormat(line, ",");
     }

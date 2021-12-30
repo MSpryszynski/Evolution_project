@@ -124,6 +124,7 @@ public class AbstractWorldMap implements IWorldMap, IPositionChangeObserver {
                     tempAnimals.get(i).addEnergy(plantEnergy/iter);
                 }
                 animals.put(vector, tempAnimals);
+                fieldsOfGrass.remove(vector);
             }
         }
     }
@@ -350,7 +351,13 @@ public class AbstractWorldMap implements IWorldMap, IPositionChangeObserver {
         return chancesLeft + " chances left";
     }
 
+    public Vector2d getJungleEndPoint() {
+        return jungleEndPoint;
+    }
 
+    public Vector2d getJungleStartPoint() {
+        return jungleStartPoint;
+    }
 
     static class Compare implements Comparator<Animal> {
         public int compare(Animal animal1, Animal animal2){

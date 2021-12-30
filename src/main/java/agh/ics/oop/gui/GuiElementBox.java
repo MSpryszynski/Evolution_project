@@ -1,8 +1,9 @@
 package agh.ics.oop.gui;
 
-import agh.ics.oop.Animal;
+
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -14,30 +15,32 @@ import javafx.scene.shape.Circle;
 public class GuiElementBox {
     private final VBox box;
 
-    public GuiElementBox(Image image){
+    public GuiElementBox(Image image, int width, boolean isJungle){
         ImageView view = new ImageView(image);
-        view.setFitHeight(15);
-        view.setFitWidth(15);
+        view.setFitHeight(150/width);
+        view.setFitWidth(150/width);
         this.box = new VBox(view);
         this.box.setAlignment(Pos.CENTER);
+        if (isJungle){
+            String cssLayout = "-fx-background-color: yellowgreen;\n";
+            box.setStyle(cssLayout);
+        }
     }
 
-    public GuiElementBox (Circle circle){
-        circle.setRadius(7);
-        circle.setFill(Color.BLACK);
-        this.box = new VBox(circle);
+    public GuiElementBox(boolean isJungle){
+        this.box = new VBox(new Label(""));
+        this.box.setAlignment(Pos.CENTER);
+        if (isJungle){
+            String cssLayout = "-fx-background-color: yellowgreen;\n";
+            box.setStyle(cssLayout);
+        }
     }
 
-    public GuiElementBox(int energy, boolean bool) {
+
+    public GuiElementBox(int energy, boolean bool, int width, boolean isJungle) {
         Circle circle = new Circle();
-        circle.setRadius(9);
+        circle.setRadius(90/width);
         circle.setFill(Color.BROWN);
-        circle.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-
-            }
-        });
         if(energy>10){
             circle.setFill(Color.RED);
         }
@@ -52,7 +55,10 @@ public class GuiElementBox {
             String cssLayout = "-fx-border-color: blue;\n" +
                     "-fx-border-width: 2;\n";
             box.setStyle(cssLayout);
-
+        }
+        if (isJungle){
+            String cssLayout = "-fx-background-color: yellowgreen;\n";
+            box.setStyle(cssLayout);
         }
         box.setAlignment(Pos.CENTER);
     }
