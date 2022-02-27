@@ -1,6 +1,11 @@
 package agh.ics.oop.gui;
 
 import agh.ics.oop.*;
+import agh.ics.oop.gui.boxes.GuiElementBox;
+import agh.ics.oop.gui.boxes.TrackBox;
+import agh.ics.oop.gui.buttons.CSVButton;
+import agh.ics.oop.gui.buttons.StartButton;
+import agh.ics.oop.gui.buttons.StopButton;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.HPos;
@@ -15,14 +20,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 
 public class App extends Application{
@@ -70,7 +68,6 @@ public class App extends Application{
         primaryStage.setScene(scene);
         primaryStage.show();
 }
-
 
 
     public GridPane draw(IWorldMap worldMap, Vector2d upRight, Vector2d lowLeft){
@@ -162,53 +159,40 @@ public class App extends Application{
             gridPaneRound.getChildren().clear();
             gridPaneRound = draw(map2, new Vector2d(width, height), new Vector2d(0,0));
             showBestGenotype = false;
-            Button buttonStop = new Button("Stop");
-            GridPane.setHalignment(buttonStop, HPos.CENTER);
-            Button buttonStart = new Button("Start");
-            GridPane.setHalignment(buttonStart,HPos.CENTER);
-            buttonStop.setOnAction(event -> engine.pause());
-            buttonStart.setOnAction(event -> engine.resume());
-            Button buttonStop2 = new Button("Stop");
-            GridPane.setHalignment(buttonStop2,HPos.CENTER);
-            Button buttonStart2 = new Button("Start");
-            GridPane.setHalignment(buttonStart2,HPos.CENTER);
-            buttonStop2.setOnAction(event -> engine2.pause());
-            buttonStart2.setOnAction(event -> engine2.resume());
+            Button buttonStop = new StopButton(engine).getButton();
+            Button buttonStart = new StartButton(engine).getButton();
+
+            Button buttonStop2 = new StopButton(engine2).getButton();
+            Button buttonStart2 = new StartButton(engine2).getButton();
+
             Integer numberOfDays = engine.getNumberOfDays();
             Integer numberOfDays2 = engine2.getNumberOfDays();
-            Label days = new Label(numberOfDays.toString());
-            Label days2 = new Label(numberOfDays2.toString());
-            GridPane.setHalignment(days, HPos.CENTER);
-            GridPane.setHalignment(days2, HPos.CENTER);
-            Label genotype = new Label(map.getStrongestGenotype());
-            Label genotype2 = new Label(map2.getStrongestGenotype());
-            GridPane.setHalignment(genotype, HPos.CENTER);
-            GridPane.setHalignment(genotype2, HPos.CENTER);
-            Label energy = new Label(map.getAverageEnergy().toString());
-            Label energy2 = new Label(map2.getAverageEnergy().toString());
-            GridPane.setHalignment(energy, HPos.CENTER);
-            GridPane.setHalignment(energy2, HPos.CENTER);
-            Label lifeTime = new Label(map.averageLifeTime().toString());
-            Label lifeTime2 = new Label(map2.averageLifeTime().toString());
-            GridPane.setHalignment(lifeTime, HPos.CENTER);
-            GridPane.setHalignment(lifeTime2, HPos.CENTER);
-            Label children = new Label(map.averageChildren().toString());
-            Label children2 = new Label(map2.averageChildren().toString());
-            GridPane.setHalignment(children, HPos.CENTER);
-            GridPane.setHalignment(children2, HPos.CENTER);
-            Label magicChances = new Label(map.sendMagicInfo());
-            Label magicChances2 = new Label(map2.sendMagicInfo());
-            GridPane.setHalignment(magicChances, HPos.CENTER);
-            GridPane.setHalignment(magicChances2, HPos.CENTER);
+
+            //stats
+            Label days = new CenteredLabel(numberOfDays.toString()).getLabel();
+            Label days2 = new CenteredLabel(numberOfDays2.toString()).getLabel();
+            Label genotype = new CenteredLabel(map.getStrongestGenotype()).getLabel();
+            Label genotype2 = new CenteredLabel(map2.getStrongestGenotype()).getLabel();
+            Label energy = new CenteredLabel(map.getAverageEnergy().toString()).getLabel();
+            Label energy2 = new CenteredLabel(map2.getAverageEnergy().toString()).getLabel();
+            Label lifeTime = new CenteredLabel(map.averageLifeTime().toString()).getLabel();
+            Label lifeTime2 = new CenteredLabel(map2.averageLifeTime().toString()).getLabel();
+            Label children = new CenteredLabel(map.averageChildren().toString()).getLabel();
+            Label children2 = new CenteredLabel(map2.averageChildren().toString()).getLabel();
+            Label magicChances = new CenteredLabel(map.sendMagicInfo()).getLabel();
+            Label magicChances2 = new CenteredLabel(map2.sendMagicInfo()).getLabel();
+
+
+            //charts
             this.animals.getData().add(new XYChart.Data(numberOfDays, map.getNumberOfAnimals()));
             this.animals2.getData().add(new XYChart.Data(numberOfDays2, map2.getNumberOfAnimals()));
             this.grass.getData().add(new XYChart.Data(numberOfDays, map.getNumberOfPlants()));
             this.grass2.getData().add(new XYChart.Data(numberOfDays2, map2.getNumberOfPlants()));
+
+
             GridPane gridBox = new GridPane();
-            Label flatMap = new Label("Flat map");
-            GridPane.setHalignment(flatMap, HPos.CENTER);
-            Label roundMap = new Label("Round map");
-            GridPane.setHalignment(roundMap, HPos.CENTER);
+            Label flatMap = new CenteredLabel("Flat map").getLabel();
+            Label roundMap = new CenteredLabel("Round map").getLabel();
             gridPaneFlat.setAlignment(Pos.CENTER);
             gridPaneRound.setAlignment(Pos.CENTER);
             gridBox.add(flatMap,1,0);
@@ -242,25 +226,7 @@ public class App extends Application{
             gridBox.add(lineChartGrass, 2, 10);
             GridPane.setHalignment(lineChartGrass, HPos.CENTER);
             if(trackedAnimal != null){
-                GridPane trackBox = new GridPane();
-                trackBox.add(new Label("Tracked genotype: "), 0, 0);
-                Label trackedGenotype = new Label(trackedAnimal.getGenotype().toString());
-                trackBox.add(trackedGenotype, 0, 1);
-                trackBox.add(new Label("Children: "), 0, 2);
-                Label trackedChildren = new Label(trackedAnimal.getTrackedChildren().toString());
-                trackBox.add(trackedChildren, 0, 3);
-                trackBox.add(new Label("Descendants:"),0,4);
-                Label trackedDescendants = new Label(trackedAnimal.getTrackedDescendants().toString());
-                trackBox.add(trackedDescendants, 0, 5);
-                trackBox.add(new Label("Description: "),0,6);
-                if(trackedAnimal.getDeathDay() != 0){
-                    Label trackedDeathDay = new Label("Died in day " + trackedAnimal.getDeathDay().toString());
-                    trackBox.add(trackedDeathDay, 0, 7);
-                }
-                else{
-                    Label trackedDeathDay = new Label("Still alive");
-                    trackBox.add(trackedDeathDay, 0, 7);
-                }
+                GridPane trackBox = new TrackBox(trackedAnimal).getTrackBox();
                 gridBox.add(trackBox, 3, 1);
             }
             gridBox.setHgap(40);
@@ -269,24 +235,9 @@ public class App extends Application{
                 showBestGenotype = true;
                 updateGridPane();
             });
-            Button saveToCSV = new Button("Create CSV");
-            saveToCSV.setOnAction(event ->{
-                List<String[]> csvData1 = engine.getCSV();
-                csvData1.add(engine.average());
-                List<String[]> csvData2 = engine2.getCSV();
-                csvData2.add(engine2.average());
-                try {
-                    writeToCsvFile(csvData1, new File( "flatmap.csv"));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                try {
-                    writeToCsvFile(csvData2, new File("roundmap.csv"));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            });
+
             gridBox.add(showGenotype, 3, 4);
+            Button saveToCSV = new CSVButton(engine, engine2).getButton();
             gridBox.add(saveToCSV, 3, 5);
             Scene scene = new Scene(gridBox, 1200, 800);
             primaryStage.setScene(scene);
@@ -370,60 +321,5 @@ public class App extends Application{
         VBox box = new VBox(gridPane, magicMap1, magicMap2, button);
         box.setAlignment(Pos.CENTER);
         return new Scene(box, 300, 300);
-    }
-
-    //https://mkyong.com/java/how-to-export-data-to-csv-file-java/
-    public String convertToCsvFormat(final String[] line) {
-        return convertToCsvFormat(line, ",");
-    }
-
-    public String convertToCsvFormat(final String[] line, final String separator) {
-        return convertToCsvFormat(line, separator, true);
-    }
-
-
-    public String convertToCsvFormat(
-            final String[] line,
-        final String separator,
-        final boolean quote) {
-
-            return Stream.of(line)                              // convert String[] to stream
-                    .map(l -> formatCsvField(l, quote))         // format CSV field
-                    .collect(Collectors.joining(separator));    // join with a separator
-
-        }
-
-        private String formatCsvField(final String field, final boolean quote) {
-
-            String result = field;
-
-            if (result.contains(",")
-                    || result.contains("\"")
-                    || result.contains("\n")
-                    || result.contains("\r\n")) {
-
-                result = result.replace("\"", "\"\"");
-
-                result = "\"" + result + "\"";
-
-            } else {
-                if (quote) {
-                    result ="\""  + result + "\"";
-                }
-            }
-            return result;
-        }
-        private void writeToCsvFile(List<String[]> list, File file) throws IOException {
-
-            List<String> collect = list.stream()
-                    .map(this::convertToCsvFormat)
-                    .collect(Collectors.toList());
-
-            try (BufferedWriter bw = new BufferedWriter(new FileWriter(file))) {
-                for (String line : collect) {
-                    bw.write(line);
-                    bw.newLine();
-                }
-            }
     }
 }

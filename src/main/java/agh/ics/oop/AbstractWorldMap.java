@@ -366,6 +366,4 @@ public class AbstractWorldMap implements IWorldMap, IPositionChangeObserver {
             return 0;
         }
     }
-
-
 }
