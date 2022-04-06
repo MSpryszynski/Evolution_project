@@ -126,9 +126,7 @@ jest parametrem symulacji.
    pojedynczą epokę. Na końcu pliku mają pojawić się wartości uśrednione.
 8. Uruchomienie programu musi być możliwe za pomocą komendy Gradla. Implikuje to, że zależności aplikacji muszą być
    obsługiwane za pomocą Gradle'a.
-
-[Często zadawane pytania](faq.md)
-
+   
 # Przykładowe implementacje
 
 Uwaga: przedstawione implementacje niekoniecznie spełniają wymaga przestawione w sekcji "Szczegółowe wymagania".
